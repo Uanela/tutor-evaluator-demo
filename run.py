@@ -148,6 +148,7 @@ def main():
     stamp = dt.datetime.now().strftime("%Y%m%d-%H%M%S")
     name = f"{args.model.replace(':', '-').replace('/', '-')}_{args.mode}_{args.order}_{'scheme' if args.with_scheme else 'noscheme'}_{stamp}"
     out_path = ROOT / "results" / f"{name}.jsonl"
+    out_path.parent.mkdir(exist_ok=True)
 
     with open(out_path, "w", encoding="utf-8") as out:
         for rep in range(args.repeats):
