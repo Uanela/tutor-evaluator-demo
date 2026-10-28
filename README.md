@@ -44,6 +44,8 @@ Add `--with-scheme`. Now per-point agreement is computed, because the marking po
 - `schema.py`  output schema (two field orders) + semantic checks
 - `run.py`     calls the model, parses, retries once with the error message, logs every run to `results/`
 - `evaluate.py` agreement, kappa, bootstrap CI, validity, issue counts
+- `viewer.py`  local browser UI for the dev data and results (`python viewer.py`, then open http://127.0.0.1:8000)
+- `ui/index.html` the page served by `viewer.py`
 - `data/dev.jsonl` 10 placeholder answers. Replace with your own questions, answers and teacher marks.
 
 ## Next steps

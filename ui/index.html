@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tutor demo viewer</title>
+<style>
+  :root {
+    --bg: #f6f6f4; --panel: #ffffff; --line: #e2e2dd; --text: #1d1d1b; --muted: #6b6b66;
+    --ok: #1f7a4d; --info: #2a5db0; --warn: #a35f00; --bad: #b3261e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font: 14px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--text); background: var(--bg);
+    display: grid; grid-template-columns: 270px minmax(0, 1fr); min-height: 100vh;
+  }
+  nav {
+    background: var(--panel); border-right: 1px solid var(--line);
+    padding: 16px 12px; position: sticky; top: 0; height: 100vh; overflow: auto;
+  }
+  nav h2 { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 16px 8px 6px; }
+  nav .group { font-weight: 600; font-size: 13px; margin: 12px 8px 2px; }
+  nav a { display: block; padding: 5px 8px; border-radius: 6px; color: var(--text); text-decoration: none; }
+  nav a:hover { background: var(--bg); }
+  nav a.active { background: #e6edf9; }
+  main { padding: 24px 28px; min-width: 0; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  h3 { font-size: 15px; margin: 0 0 6px; }
+  h4 { font-size: 13px; margin: 12px 0 6px; }
+  p { margin: 6px 0; }
+  .muted { color: var(--muted); font-weight: 400; }
+  .bad-text { color: var(--bad); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; margin: 16px 0; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+  .card .k { color: var(--muted); font-size: 12px; }
+  .card .v { font-size: 20px; font-weight: 600; margin: 2px 0; }
+  .chip {
+    display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 999px;
+    border: 1px solid var(--line); background: var(--panel); white-space: nowrap;
+  }
+  .chip.ok { color: var(--ok); border-color: #bfe0cf; background: #eef8f2; }
+  .chip.info { color: var(--info); border-color: #c5d5ef; background: #eef3fb; }
+  .chip.warn { color: var(--warn); border-color: #efd7a8; background: #fdf6e8; }
+  .chip.bad { color: var(--bad); border-color: #efc3c0; background: #fcefee; }
+  .toolbar { margin: 18px 0 10px; display: flex; gap: 12px; align-items: center; }
+  select { font: inherit; padding: 4px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+  table { width: 100%; border-collapse: collapse; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  th, td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+  th { font-size: 12px; color: var(--muted); font-weight: 600; background: #fbfbfa; }
+  tr[data-go] { cursor: pointer; }
+  tr[data-go]:hover td { background: #fafaf8; }
+  .block { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; margin: 14px 0; }
+  .block table { margin-top: 10px; }
+  ol.scheme { margin: 4px 0 0; padding-left: 20px; }
+  ol.scheme li { margin: 2px 0; }
+  .group-block { margin-top: 18px; }
+  .group-block > h3 { margin-bottom: 2px; }
+  .rows { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-top: 8px; }
+  details.row + details.row { border-top: 1px solid var(--line); }
+  details.row summary {
+    display: grid; grid-template-columns: 120px minmax(0, 1fr) 150px 150px 120px;
+    gap: 12px; align-items: center; padding: 9px 12px; cursor: pointer; list-style: none;
+  }
+  details.row summary::-webkit-details-marker { display: none; }
+  details.row summary:hover { background: #fafaf8; }
+  .id { font-family: ui-monospace, monospace; font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ans { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .score { white-space: nowrap; font-size: 13px; }
+  .score b { margin-left: 4px; }
+  .pt { display: inline-block; width: 16px; text-align: center; font-weight: 700; border-radius: 4px; }
+  .pt.yes { color: var(--ok); }
+  .pt.no { color: var(--bad); }
+  .pt.diff { background: #fde9d4; }
+  .detail { padding: 6px 16px 14px 16px; background: #fbfbfa; border-top: 1px solid var(--line); }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .detail table { font-size: 13px; }
+  pre {
+    background: #f1f1ee; padding: 10px; border-radius: 6px; overflow: auto;
+    font: 12px/1.4 ui-monospace, monospace; white-space: pre-wrap; word-break: break-word;
+  }
+  details summary { cursor: pointer; }
+  @media (max-width: 900px) {
+    body { grid-template-columns: 1fr; }
+    nav { position: static; height: auto; }
+    details.row summary { grid-template-columns: 1fr; }
+    .two { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<nav id="nav"></nav>
+<main id="main"><p class="muted">Loading…</p></main>
+<script>
+const STATUS = {
+  match: ["Match", "ok"],
+  close: ["Off by 1", "info"],
+  mismatch: ["Mismatch", "warn"],
+  issues: ["Semantic issue", "bad"],
+  invalid: ["Invalid output", "bad"],
+};
+const STATUS_ORDER = ["mismatch", "close", "issues", "invalid", "match"];
+
+const nav = document.getElementById("nav");
+const main = document.getElementById("main");
+let current = null;
+let groupBy = "question";
+
+const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+}[c]));
+const pct = (x) => (x == null ? "–" : `${Math.round(100 * x)}%`);
+const num = (x) => (x == null ? "–" : x.toFixed(2));
+const ci = (s) => (s == null ? "–" : `${pct(s.value)} <span class="muted">[${Math.round(100 * s.lo)}–${Math.round(100 * s.hi)}]</span>`);
+
+const api = (path) => fetch(path).then((r) => {
+  if (!r.ok) throw new Error(`${path} → ${r.status}`);
+  return r.json();
+});
+
+function status(r) {
+  if (!r.valid) return "invalid";
+  if (r.issues && r.issues.length) return "issues";
+  if (r.pred_total === r.teacher_total) return "match";
+  if (Math.abs(r.pred_total - r.teacher_total) <= 1) return "close";
+  return "mismatch";
+}
+
+function marks(pts, ref) {
+  if (!pts) return '<span class="muted">–</span>';
+  return pts.map((p, i) => {
+    const diff = ref && ref[i] !== p ? " diff" : "";
+    return `<span class="pt ${p ? "yes" : "no"}${diff}">${p ? "✓" : "✗"}</span>`;
+  }).join("");
+}
+
+function groupRows(rows, keyOf, labelOf) {
+  const map = new Map();
+  for (const r of rows) {
+    const k = keyOf(r);
+    if (!map.has(k)) map.set(k, { key: k, label: labelOf(r), rows: [] });
+    map.get(k).rows.push(r);
+  }
+  return [...map.values()];
+}
+
+function renderNav(runs, activeRun, activeView) {
+  const configs = new Map();
+  for (const r of runs) {
+    const k = `${r.model} · ${r.mode} · ${r.order} · ${r.scheme}`;
+    if (!configs.has(k)) configs.set(k, []);
+    configs.get(k).push(r);
+  }
+  const runLinks = [...configs].map(([k, rs]) =>
+    `<div class="group">${esc(k)}</div>` +
+    rs.map((r) => `<a href="#/run/${encodeURIComponent(r.name)}" class="${r.name === activeRun ? "active" : ""}">
+      ${esc(r.created || r.name)} <span class="muted">· n=${r.summary.n}</span></a>`).join("")
+  ).join("");
+  nav.innerHTML = `
+    <h2>Views</h2>
+    <a href="#/overview" class="${activeView === "overview" ? "active" : ""}">Overview</a>
+    <a href="#/dataset" class="${activeView === "dataset" ? "active" : ""}">Dev dataset</a>
+    <h2>Runs by configuration</h2>
+    ${runLinks || '<p class="muted" style="padding:0 8px">No runs in results/ yet.</p>'}`;
+}
+
+function renderOverview(runs) {
+  if (!runs.length) {
+    main.innerHTML = `<h1>Overview</h1><p class="muted">No results yet. Run run.py first.</p>`;
+    return;
+  }
+  main.innerHTML = `
+    <h1>Overview</h1>
+    <p class="muted">One row per results file. Click a row to open it.</p>
+    <table>
+      <tr><th>Model</th><th>Mode</th><th>Order</th><th>Scheme</th><th>Run</th><th>n</th>
+        <th>Syntactic valid</th><th>Semantic valid</th><th>Exact (all)</th><th>Within 1</th>
+        <th>Kappa</th><th>Point agreement</th><th>Latency</th></tr>
+      ${runs.map((r) => {
+        const s = r.summary;
+        return `<tr data-go="${esc(r.name)}">
+          <td>${esc(r.model)}</td><td>${esc(r.mode)}</td><td>${esc(r.order)}</td><td>${esc(r.scheme)}</td>
+          <td>${esc(r.created)}</td><td>${s.n}</td>
+          <td>${pct(s.syntactic_valid)}</td><td>${pct(s.semantic_valid)}</td>
+          <td>${ci(s.exact_all)}</td><td>${ci(s.within1_all)}</td>
+          <td>${num(s.kappa)}</td><td>${ci(s.point_agree)}</td>
+          <td>${s.latency == null ? "–" : s.latency.toFixed(1) + "s"}</td>
+        </tr>`;
+      }).join("")}
+    </table>`;
+}
+
+function renderRunHeader(run) {
+  const s = run.summary;
+  const cards = [
+    ["Syntactic valid", pct(s.syntactic_valid), `${s.retried} retried`],
+    ["Semantic valid", pct(s.semantic_valid), "parsed and no issue codes"],
+    ["Exact total (all)", ci(s.exact_all), "failures count as wrong"],
+    ["Exact total (valid)", pct(s.exact_valid), "flatters: failures dropped"],
+    ["Within 1 (all)", ci(s.within1_all), ""],
+    ["Kappa (valid)", num(s.kappa), ""],
+    ["Per-point agreement", ci(s.point_agree), s.point_count ? `${s.point_count} points` : "no mark scheme"],
+    ["Latency / answer", s.latency == null ? "–" : `${s.latency.toFixed(1)}s`,
+      s.tokens == null ? "" : `${Math.round(s.tokens)} output tokens`],
+  ];
+  const issues = Object.entries(s.issues);
+  return `
+    <h1>${esc(run.model)} · ${esc(run.mode)} · ${esc(run.order)} · ${esc(run.scheme)}</h1>
+    <p class="muted">${esc(run.file)} · ${esc(run.created)} · data ${esc(run.data)} · git ${esc(run.git_commit || "–")} · seeds ${s.seeds}</p>
+    <div class="cards">
+      ${cards.map(([k, v, sub]) => `<div class="card"><div class="k">${k}</div><div class="v">${v}</div><div class="k">${esc(sub)}</div></div>`).join("")}
+    </div>
+    <p><b>Issues:</b> ${issues.length
+      ? issues.map(([k, v]) => `<span class="chip bad">${esc(k)} ×${v}</span>`).join(" ")
+      : '<span class="muted">none</span>'}</p>`;
+}
+
+function rowDetail(r) {
+  const it = r.item || {};
+  let parsed = null;
+  try { parsed = JSON.parse(r.raw); } catch (e) { parsed = null; }
+  const points = parsed && Array.isArray(parsed.marking_points) ? parsed.marking_points : [];
+  const scheme = (it.mark_scheme || []).map((m, i) => {
+    const ok = r.teacher_points ? r.teacher_points[i] : false;
+    return `<li><span class="pt ${ok ? "yes" : "no"}">${ok ? "✓" : "✗"}</span> ${esc(m)}</li>`;
+  }).join("");
+  const pointsTable = points.length
+    ? `<table><tr><th>Point</th><th>Awarded</th><th>Evidence</th></tr>
+        ${points.map((p) => `<tr><td>${esc(p.point)}</td>
+          <td><span class="pt ${p.awarded ? "yes" : "no"}">${p.awarded ? "✓" : "✗"}</span></td>
+          <td>${esc(p.evidence) || '<span class="muted">—</span>'}</td></tr>`).join("")}
+      </table>`
+    : '<p class="muted">No parsed output.</p>';
+  const issues = (r.issues || []).map((i) => `<span class="chip bad">${esc(i)}</span>`).join(" ")
+    || '<span class="muted">none</span>';
+  return `
+    <div class="detail">
+      <p><b>Question:</b> ${esc(it.question)}</p>
+      <p class="muted">Teacher note: ${esc(it.teacher_note)}</p>
+      <div class="two">
+        <div><h4>Mark scheme (teacher ticks)</h4><ol class="scheme">${scheme}</ol></div>
+        <div>
+          <h4>Model judgement</h4>
+          ${pointsTable}
+          ${parsed ? `
+            <p><b>Error type:</b> ${esc(parsed.error_type)}</p>
+            <p><b>Misconception:</b> ${esc(parsed.misconception) || "—"}</p>
+            <p><b>Feedback:</b> ${esc(parsed.feedback)}</p>` : ""}
+          ${r.error ? `<p class="bad-text"><b>Error:</b> ${esc(r.error)}</p>` : ""}
+        </div>
+      </div>
+      <p><b>Issues:</b> ${issues} <span class="muted">· attempts ${r.attempts} · ${r.latency_s}s</span></p>
+      <details><summary class="muted">Raw output</summary><pre>${esc(r.raw)}</pre></details>
+    </div>`;
+}
+
+function rowHtml(r) {
+  const st = status(r);
+  const [label, tone] = STATUS[st];
+  const it = r.item || {};
+  return `<details class="row">
+    <summary>
+      <span class="id">${esc(r.id)}</span>
+      <span class="ans" title="${esc(it.student_answer)}">${esc(it.student_answer)}</span>
+      <span class="score">Teacher ${marks(r.teacher_points)} <b>${r.teacher_total}</b></span>
+      <span class="score">Model ${marks(r.pred_points, r.teacher_points)} <b>${r.valid ? r.pred_total : "–"}</b></span>
+      <span><span class="chip ${tone}">${label}</span></span>
+    </summary>
+    ${rowDetail(r)}
+  </details>`;
+}
+
+function drawGroups() {
+  const el = document.getElementById("groups");
+  let groups;
+  if (groupBy === "question") {
+    groups = groupRows(current.rows, (r) => r.item.question_id || r.id, (r) => r.item.question_id || r.id);
+  } else if (groupBy === "status") {
+    groups = groupRows(current.rows, status, (r) => STATUS[status(r)][0])
+      .sort((a, b) => STATUS_ORDER.indexOf(a.key) - STATUS_ORDER.indexOf(b.key));
+  } else {
+    groups = groupRows(current.rows, (r) => r.kind, (r) => r.kind);
+  }
+  el.innerHTML = groups.map((g) => {
+    const exact = g.rows.filter((r) => status(r) === "match").length;
+    const sub = groupBy === "question" && g.rows[0].item.question
+      ? `<p class="muted">${esc(g.rows[0].item.question)}</p>` : "";
+    return `<section class="group-block">
+      <h3>${esc(g.label)} <span class="muted">${g.rows.length} answers · ${exact} exact</span></h3>
+      ${sub}
+      <div class="rows">${g.rows.map(rowHtml).join("")}</div>
+    </section>`;
+  }).join("") || '<p class="muted">No results in this run.</p>';
+}
+
+async function renderRun(name) {
+  current = await api(`/api/run?name=${encodeURIComponent(name)}`);
+  main.innerHTML = `${renderRunHeader(current)}
+    <div class="toolbar">
+      <label>Group by
+        <select id="group">
+          <option value="question">Question</option>
+          <option value="status">Result</option>
+          <option value="kind">Kind</option>
+        </select>
+      </label>
+    </div>
+    <div id="groups"></div>`;
+  const select = document.getElementById("group");
+  select.value = groupBy;
+  select.addEventListener("change", (e) => {
+    groupBy = e.target.value;
+    drawGroups();
+  });
+  drawGroups();
+}
+
+async function renderDataset() {
+  const d = await api("/api/dataset");
+  const total = d.questions.reduce((n, q) => n + q.answers.length, 0);
+  main.innerHTML = `
+    <h1>Dev dataset</h1>
+    <p class="muted">${d.questions.length} questions · ${total} answers · from data/</p>
+    ${d.questions.map((q) => `
+      <section class="block">
+        <h3>${esc(q.question_id)} <span class="muted">syllabus ${esc(q.syllabus_ref)} · ${esc(q.level)} · ${esc(q.kind)} · ${q.max_mark} marks</span></h3>
+        <p>${esc(q.question)}</p>
+        <ol class="scheme">${q.mark_scheme.map((m) => `<li>${esc(m)}</li>`).join("")}</ol>
+        <table>
+          <tr><th>Id</th><th>Student answer</th><th>Teacher marks</th><th>Teacher note</th></tr>
+          ${q.answers.map((a) => `<tr>
+            <td class="id">${esc(a.id)}</td>
+            <td>${esc(a.student_answer)}</td>
+            <td>${marks(a.teacher_points)} <b>${a.teacher_total}/${q.max_mark}</b></td>
+            <td>${esc(a.teacher_note)}</td>
+          </tr>`).join("")}
+        </table>
+      </section>`).join("")}`;
+}
+
+async function route() {
+  const path = location.hash.replace(/^#\/?/, "");
+  const [view, ...rest] = path.split("/");
+  const runName = view === "run" ? decodeURIComponent(rest.join("/")) : null;
+  try {
+    const runs = await api("/api/runs");
+    renderNav(runs, runName, view);
+    if (view === "run") await renderRun(runName);
+    else if (view === "dataset") await renderDataset();
+    else renderOverview(runs);
+  } catch (e) {
+    main.innerHTML = `<p class="bad-text">Could not load: ${esc(e.message)}</p>`;
+  }
+}
+
+main.addEventListener("click", (e) => {
+  const tr = e.target.closest("tr[data-go]");
+  if (tr) location.hash = `#/run/${encodeURIComponent(tr.dataset.go)}`;
+});
+window.addEventListener("hashchange", route);
+route();
+</script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+{
+  "config": {
+    "model": "gemma4:e2b",
+    "mode": "schema",
+    "order": "reason_first",
+    "with_scheme": true,
+    "max_attempts": 2,
+    "temperature": 0,
+    "git_commit": "55f073c",
+    "data": "dev.jsonl",
+    "seed": 0
+  },
+  "id": "q_density-a1",
+  "kind": "calculation",
+  "valid": true,
+  "error": null,
+  "attempts": 1,
+  "issues": [],
+  "pred_total": 2,
+  "pred_points": [
+    true,
+    true
+  ],
+  "teacher_total": 2,
+  "teacher_points": [
+    true,
+    true
+  ],
+  "max_mark": 2,
+  "latency_s": 77.205,
+  "output_tokens": 171,
+  "raw": {
+    "marking_points": [
+      {
+        "point": "Uses density = mass / volume (e.g. 240 / 30)",
+        "awarded": true,
+        "evidence": "240 / 30"
+      },
+      {
+        "point": "Answer 8.0 g/cm3 (or 8000 kg/m3) with a correct unit",
+        "awarded": true,
+        "evidence": "8 g/cm3"
+      }
+    ],
+    "total_mark": 2,
+    "error_type": "none",
+    "misconception": "",
+    "feedback": "The calculation is correct and the units are appropriate."
+  }
+}
+
+{
+  "config": {
+    "model": "gemma4:e2b",
+    "mode": "schema",
+    "order": "reason_first",
+    "with_scheme": true,
+    "max_attempts": 2,
+    "temperature": 0,
+    "git_commit": "55f073c",
+    "data": "dev.jsonl",
+    "seed": 0
+  },
+  "id": "q_density-a2",
+  "kind": "calculation",
+  "valid": true,
+  "error": null,
+  "attempts": 1,
+  "issues": [],
+  "pred_total": 0,
+  "pred_points": [
+    false,
+    false
+  ],
+  "teacher_total": 0,
+  "teacher_points": [
+    false,
+    false
+  ],
+  "max_mark": 2,
+  "latency_s": 89.52,
+  "output_tokens": 176,
+  "raw": {
+    "marking_points": [
+      {
+        "point": "Uses density = mass / volume (e.g. 240 / 30)",
+        "awarded": false,
+        "evidence": ""
+      },
+      {
+        "point": "Answer 8.0 g/cm3 (or 8000 kg/m3) with a correct unit",
+        "awarded": false,
+        "evidence": ""
+      }
+    ],
+    "total_mark": 0,
+    "error_type": "arithmetic",
+    "misconception": "Incorrect formula application (multiplication instead of division).",
+    "feedback": "You need to use the correct formula for density, which is mass divided by volume."
+  }
+}
+
+{
+  "config": {
+    "model": "gemma4:e2b",
+    "mode": "schema",
+    "order": "reason_first",
+    "with_scheme": true,
+    "max_attempts": 2,
+    "temperature": 0,
+    "git_commit": "55f073c",
+    "data": "dev.jsonl",
+    "seed": 0
+  },
+  "id": "q_density-a3",
+  "kind": "calculation",
+  "valid": true,
+  "error": null,
+  "attempts": 1,
+  "issues": [
+    "point_count_mismatch"
+  ],
+  "pred_total": 1,
+  "pred_points": [
+    true
+  ],
+  "teacher_total": 1,
+  "teacher_points": [
+    true,
+    false
+  ],
+  "max_mark": 2,
+  "latency_s": 70.861,
+  "output_tokens": 144,
+  "raw": {
+    "marking_points": [
+      {
+        "point": "Uses density = mass / volume (e.g. 240 / 30)",
+        "awarded": true,
+        "evidence": "density = mass/volume = 240/30"
+      }
+    ],
+    "total_mark": 1,
+    "error_type": "unit",
+    "misconception": "Failure to include the correct units in the final answer.",
+    "feedback": "You have correctly set up the formula and performed the calculation. Remember to always include the appropriate units in your final answer."
+  }
+}
+
+{
+  "config": {
+    "model": "gemma4:e2b",
+    "mode": "schema",
+    "order": "reason_first",
+    "with_scheme": true,
+    "max_attempts": 2,
+    "temperature": 0,
+    "git_commit": "55f073c",
+    "data": "dev.jsonl",
+    "seed": 0
+  },
+  "id": "q_massweight-b1",
+  "kind": "explanation",
+  "valid": true,
+  "error": null,
+  "attempts": 1,
+  "issues": [],
+  "pred_total": 1,
+  "pred_points": [
+    true,
+    false
+  ],
+  "teacher_total": 2,
+  "teacher_points": [
+    true,
+    true
+  ],
+  "max_mark": 2,
+  "latency_s": 82.321,
+  "output_tokens": 187,
+  "raw": {
+    "marking_points": [
+      {
+        "point": "Mass is the amount of matter in the object (does not change with location)",
+        "awarded": true,
+        "evidence": "Mass is how much matter is in an object and stays the same everywhere."
+      },
+      {
+        "point": "Weight is the force of gravity acting on the object (depends on the gravitational field strength)",
+        "awarded": false,
+        "evidence": ""
+      }
+    ],
+    "total_mark": 1,
+    "error_type": "concept",
+    "misconception": "The student confused the definition of weight with an illustrative example.",
+    "feedback": "You correctly defined mass. For weight, ensure you define it as a force and mention its dependence on the gravitational field strength."
+  }
+}
+
+{
+  "config": {
+    "model": "gemma4:e2b",
+    "mode": "schema",
+    "order": "reason_first",
+    "with_scheme": true,
+    "max_attempts": 2,
+    "temperature": 0,
+    "git_commit": "55f073c",
+    "data": "dev.jsonl",
+    "seed": 0
+  },
+  "id": "q_massweight-b2",
+  "kind": "explanation",
+  "valid": true,
+  "error": null,
+  "attempts": 1,
+  "issues": [],
+  "pred_total": 0,
+  "pred_points": [
+    false,
+    false
+  ],
+  "teacher_total": 0,
+  "teacher_points": [
+    false,
+    false
+  ],
+  "max_mark": 2,
+  "latency_s": 78.587,
+  "output_tokens": 182,
+  "raw": {
+    "marking_points": [
+      {
+        "point": "Mass is the amount of matter in the object (does not change with location)",
+        "awarded": false,
+        "evidence": ""
+      },
+      {
+        "point": "Weight is the force of gravity acting on the object (depends on the gravitational field strength)",
+        "awarded": false,
+        "evidence": ""
+      }
+    ],
+    "total_mark": 0,
+    "error_type": "concept",
+    "misconception": "The student confused the descriptive/perceptual understanding of mass and weight with their precise physical definitions.",
+    "feedback": "You need to use precise scientific terminology. Mass is the amount of matter, while weight is the force of gravity acting on that mass."
+  }
+}
+
+{
+  "config": {
+    "model": "gemma4:e2b",
+    "mode": "schema",
+    "order": "reason_first",
+    "with_scheme": true,
+    "max_attempts": 2,
+    "temperature": 0,
+    "git_commit": "55f073c",
+    "data": "dev.jsonl",
+    "seed": 0
+  },
+  "id": "q_massweight-b3",
+  "kind": "explanation",
+  "valid": true,
+  "error": null,
+  "attempts": 1,
+  "issues": [],
+  "pred_total": 1,
+  "pred_points": [
+    true,
+    false
+  ],
+  "teacher_total": 1,
+  "teacher_points": [
+    true,
+    false
+  ],
+  "max_mark": 2,
+  "latency_s": 95.755,
+  "output_tokens": 202,
+  "raw": {
+    "marking_points": [
+      {
+        "point": "Mass is the amount of matter in the object (does not change with location)",
+        "awarded": true,
+        "evidence": "Mass is the amount of matter in an object"
+      },
+      {
+        "point": "Weight is the force of gravity acting on the object (depends on the gravitational field strength)",
+        "awarded": false,
+        "evidence": ""
+      }
+    ],
+    "total_mark": 1,
+    "error_type": "concept",
+    "misconception": "The student used colloquial language ('how heavy') instead of the precise physical definitions involving matter/amount and force/field strength.",
+    "feedback": "You correctly identified that mass relates to the amount of matter. To score full marks, ensure you define weight as a force due to gravity acting on that mass."
+  }
+}
+
+{
+  "config": {
+    "model": "gemma4:e2b",
+    "mode": "schema",
+    "order": "reason_first",
+    "with_scheme": true,
+    "max_attempts": 2,
+    "temperature": 0,
+    "git_commit": "55f073c",
+    "data": "dev.jsonl",
+    "seed": 0
+  },
+  "id": "q_gaspressure-c1",
+  "kind": "explanation",
+  "valid": true,
+  "error": null,
+  "attempts": 1,
+  "issues": [],
+  "pred_total": 3,
+  "pred_points": [
+    true,
+    true,
+    true
+  ],
+  "teacher_total": 3,
+  "teacher_points": [
+    true,
+    true,
+    true
+  ],
+  "max_mark": 3,
+  "latency_s": 82.339,
+  "output_tokens": 210,
+  "raw": {
+    "marking_points": [
+      {
+        "point": "Particles move randomly / continuously",
+        "awarded": true,
+        "evidence": "The gas particles move around randomly"
+      },
+      {
+        "point": "Particles collide with the walls of the container",
+        "awarded": true,
+        "evidence": "and hit the walls"
+      },
+      {
+        "point": "Each collision exerts a force; many collisions give a force per unit area (pressure)",
+        "awarded": true,
+        "evidence": "Each collision pushes on the wall, and there are so many collisions that it gives a steady pressure"
+      }
+    ],
+    "total_mark": 3,
+    "error_type": "none",
+    "misconception": "",
+    "feedback": "A good explanation. You have correctly identified the role of random motion and collisions in explaining pressure."
+  }
+}
+
+{
+  "config": {
+    "model": "gemma4:e2b",
+    "mode": "schema",
+    "order": "reason_first",
+    "with_scheme": true,
+    "max_attempts": 2,
+    "temperature": 0,
+    "git_commit": "55f073c",
+    "data": "dev.jsonl",
+    "seed": 0
+  },
+  "id": "q_gaspressure-c2",
+  "kind": "explanation",
+  "valid": true,
+  "error": null,
+  "attempts": 1,
+  "issues": [],
+  "pred_total": 0,
+  "pred_points": [
+    false,
+    false,
+    false
+  ],
+  "teacher_total": 0,
+  "teacher_points": [
+    false,
+    false,
+    false
+  ],
+  "max_mark": 3,
+  "latency_s": 86.083,
+  "output_tokens": 213,
+  "raw": {
+    "marking_points": [
+      {
+        "point": "Particles move randomly / continuously",
+        "awarded": false,
+        "evidence": ""
+      },
+      {
+        "point": "Particles collide with the walls of the container",
+        "awarded": false,
+        "evidence": ""
+      },
+      {
+        "point": "Each collision exerts a force; many collisions give a force per unit area (pressure)",
+        "awarded": false,
+        "evidence": ""
+      }
+    ],
+    "total_mark": 0,
+    "error_type": "concept",
+    "misconception": "The student provided a macroscopic description rather than the required microscopic explanation involving particle motion and collisions to explain pressure.",
+    "feedback": "You need to explain the process in terms of particle motion, collisions, and the resulting force/pressure. Focus on how random motion leads to impacts against the walls."
+  }
+}
+
+{
+  "config": {
+    "model": "gemma4:e2b",
+    "mode": "schema",
+    "order": "reason_first",
+    "with_scheme": true,
+    "max_attempts": 2,
+    "temperature": 0,
+    "git_commit": "55f073c",
+    "data": "dev.jsonl",
+    "seed": 0
+  },
+  "id": "q_power-d1",
+  "kind": "calculation",
+  "valid": true,
+  "error": null,
+  "attempts": 1,
+  "issues": [],
+  "pred_total": 3,
+  "pred_points": [
+    true,
+    true,
+    true
+  ],
+  "teacher_total": 3,
+  "teacher_points": [
+    true,
+    true,
+    true
+  ],
+  "max_mark": 3,
+  "latency_s": 101.147,
+  "output_tokens": 238,
+  "raw": {
+    "marking_points": [
+      {
+        "point": "Weight = mg = 200 N",
+        "awarded": true,
+        "evidence": "weight = 20 x 10 = 200 N"
+      },
+      {
+        "point": "Work done = force x distance (error carried forward)",
+        "awarded": true,
+        "evidence": "work = 200 x 5 = 1000 J"
+      },
+      {
+        "point": "Power = work / time (error carried forward); final answer 100 W",
+        "awarded": true,
+        "evidence": "power = 1000 / 10 = 100 W"
+      }
+    ],
+    "total_mark": 3,
+    "error_type": "none",
+    "misconception": "",
+    "feedback": "All steps and calculations are correct. You have successfully applied the definitions for weight, work, and power."
+  }
+}
+
+{
+  "config": {
+    "model": "gemma4:e2b",
+    "mode": "schema",
+    "order": "reason_first",
+    "with_scheme": true,
+    "max_attempts": 2,
+    "temperature": 0,
+    "git_commit": "55f073c",
+    "data": "dev.jsonl",
+    "seed": 0
+  },
+  "id": "q_power-d2",
+  "kind": "calculation",
+  "valid": true,
+  "error": null,
+  "attempts": 1,
+  "issues": [],
+  "pred_total": 0,
+  "pred_points": [
+    false,
+    false,
+    false
+  ],
+  "teacher_total": 2,
+  "teacher_points": [
+    false,
+    true,
+    true
+  ],
+  "max_mark": 3,
+  "latency_s": 186.06,
+  "output_tokens": 220,
+  "raw": {
+    "marking_points": [
+      {
+        "point": "Weight = mg = 200 N",
+        "awarded": false,
+        "evidence": ""
+      },
+      {
+        "point": "Work done = force x distance (error carried forward)",
+        "awarded": false,
+        "evidence": ""
+      },
+      {
+        "point": "Power = work / time (error carried forward); final answer 100 W",
+        "awarded": false,
+        "evidence": ""
+      }
+    ],
+    "total_mark": 0,
+    "error_type": "arithmetic",
+    "misconception": "Incorrect application of the formula for weight and work done; mass was used instead of weight as force.",
+    "feedback": "You need to ensure you calculate the weight (force) first using $W=mg$ before calculating the work done. Pay close attention to units throughout your calculation."
+  }
+}
